@@ -1,6 +1,6 @@
 from distutils.core import setup
 
-setup(name='Vtiger-module',
+setup(name='vtiger',
       version='1.0',
       description='Easy helper for VtigerCrm',
       author='Verbalist',
