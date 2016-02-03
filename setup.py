@@ -6,5 +6,4 @@ setup(name='Vtiger-module',
       author='Verbalist',
       author_email='enshteynn@ukr.net',
       url='https://github.com/Verbalist/Vtiger',
-      packages=['vtiger'],
      )
