@@ -67,7 +67,6 @@ class Vtiger():
 
     def create(self, data, module, assigned_user_id=None):
         try:
-            data['cf_1022'] = '256'
             if data.get('assigned_user_id') is None:
                 data['assigned_user_id'] = assigned_user_id if assigned_user_id is not None else self.user_id
             r = self._post('/webservice.php', data={'operation': 'create',
