@@ -1,3 +1,5 @@
+import random
+
 __author__ = 'verbalist'
 
 import requests
@@ -80,14 +82,25 @@ class Vtiger():
         except Exception as e:
             print(e)
 
-    def update(self, data, module, assigned_user_id=None):
+    def update(self, data, assigned_user_id=None):
         try:
-            if data.get('assigned_user_id') is None:
-                data['assigned_user_id'] = assigned_user_id if assigned_user_id is not None else self.user_id
+            # if data.get('assigned_user_id') is None:
+            #     data['assigned_user_id'] = assigned_user_id if assigned_user_id is not None else self.user_id
             r = self._post('/webservice.php', data={'operation': 'update',
                                                     'sessionName': self.session_name,
-                                                    'element': json.dumps(data),
-                                                    'elementType': module})
+                                                    'element': json.dumps(data)})
+            if r['success']:
+                return r
+            else:
+                raise Exception(r['error'])
+        except Exception as e:
+            print(e)
+
+    def delete(self, _id):
+        try:
+            r = self._post('/webservice.php', data={'operation': 'delete',
+                                                    'sessionName': self.session_name,
+                                                    'id': str(_id)})
             if r['success']:
                 return r
             else:
@@ -109,28 +122,42 @@ class Vtiger():
                     if mandatory:
                         if x['mandatory']:
                             print('label:', x['label'], 'inner_name:', x['name'], 'type:', x['type']['name'])
-                            d[x['name']] = None
+                            d[x['name']] = x['label']
                     else:
                         print('label:', x['label'], 'inner_name:', x['name'], 'type:', x['type']['name'])
-                        d[x['name']] = None
+                        d[x['name']] = x['label']
                 print(d)
             else:
                 for x in r['result']['fields']:
                     if x['label'].lower() == label.lower():
                         print('label:', x['label'], 'inner_name:', x['name'], 'type:', x['type']['name'])
                         break
-        return r
+            return r['result']
+        else:
+            return r
 
     def query(self, q):
+        """q must be in double quotes"""
         if not q.endswith(';'): q += ';'
         r = self._get('/webservice.php?operation=query&sessionName={0}&query={1}'.format(self.session_name, q))
         if r['success']:
             for x in r['result']:
-                print(x)
-        return r
+                for k, v in x.items():
+                    print(k, ':', v)
+                # print(x)
+            return r['result'][0] if len(r['result']) == 1 else r['result']
+        else:
+            return r
 
 
 if __name__ == '__main__':
-    v = Vtiger('login', 'url', 'access_key')
-    v.login()
-    v.describe('Leads', mandatory=False)
+    # V = Vtiger('k.s.4invest@gmail.com', 'https://infoconsulting2.od2.vtiger.com', 'ez9k5qpJ6fBLOJM7')
+    V = Vtiger('andreyfrost@gmail.com', 'https://gm64.od2.vtiger.com', '0KfHCXp6gynViFDi')
+    V.login()
+    # a = V.query("select id from paymetsdetail where firstname='%s' order by id desc limit 1" % 'Анна')
+
+    a = V.describe('paymentsdetails', mandatory=False)
+    print(a)
+    # V.describe('Leads', mandatory=False)
+    # refs = V.query("select id from Users where title = 'Sales Representative'")
+    # ref = refs[random.randint(0, len(refs)-1)]['id']
