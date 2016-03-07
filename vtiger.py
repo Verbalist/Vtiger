@@ -16,12 +16,10 @@ class Vtiger():
     token = None
     expire = int(time.time())
 
-
     def __init__(self, username, main_url, access_key):
         self.username = username
         self.main_url = main_url
         self.access_key = access_key
-
 
     def _get(self, url, data=None):
         r = requests.get(self.main_url + url, data=data, headers={'Content-Type': 'application/x-www-form-urlencoded'})
@@ -151,14 +149,13 @@ class Vtiger():
 
 
 if __name__ == '__main__':
-    # V = Vtiger('k.s.4invest@gmail.com', 'https://infoconsulting2.od2.vtiger.com', 'ez9k5qpJ6fBLOJM7')
-    V = Vtiger('andreyfrost@gmail.com', 'https://gm64.od2.vtiger.com', '0KfHCXp6gynViFDi')
+    V = Vtiger('k.s.4invest@gmail.com', 'https://infoconsulting2.od2.vtiger.com', 'ez9k5qpJ6fBLOJM7')
+    # V = Vtiger('andreyfrost@gmail.com', 'https://gm64.od2.vtiger.com', '0KfHCXp6gynViFDi')
     V.login()
     # a = V.query("select id from paymetsdetail where firstname='%s' order by id desc limit 1" % 'Анна')
 
-    a = V.describe('paymentsdetails', mandatory=False)
+    a = V.describe('Leads', mandatory=False)
     print(a)
     # V.describe('Leads', mandatory=False)
     # refs = V.query("select id from Users where title = 'Sales Representative'")
     # ref = refs[random.randint(0, len(refs)-1)]['id']
-asddas
