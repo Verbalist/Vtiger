@@ -6,7 +6,7 @@ loop = asyncio.get_event_loop()
 import argparse
 
 async def main(command):
-    reader, writer = await asyncio.open_connection('192.168.0.128', 56013)
+    reader, writer = await asyncio.open_connection('192.168.0.199', 56013)
     with open(os.path.join('.git', 'config'), 'r') as f:
         origin = re.findall('url = [^\n]+', f.read())[0].split(' ')[-1]
     project = origin.split('/')[-1][:-4]

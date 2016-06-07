@@ -38,7 +38,6 @@ class VtigerTest(unittest.TestCase):
         q = self.v.query('select firstname, id from Contacts where firstname=%s' % 'monty')
         self.assertEqual(q['firstname'], 'monty', msg=q)
 
-
     @unittest.skip
     def test_update(self):
         q = self.v.query('select firstname, lastname, leadsource, leadstatus, assigned_user_id, cf_1155, cf_1159, assigned_user_id from Leads where id=2x4727')

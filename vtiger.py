@@ -147,15 +147,49 @@ class Vtiger():
         else:
             return r
 
+    @staticmethod
+    def create_or_update_contact(username, data):
+        contact = V.query("""
+            select id, cf_1022, lastname, cf_1177, assigned_user_id
+            from Contacts
+            where firstname='%s' """ % username)
+        if not contact:
+            # lead = V.query("select * from Leads where firstname='%s'" % username)
+            # if not lead:
+            return
+            # base_data = {'cf_1018': username, 'cf_1147': lead['cf_1145'], 'mobile': lead['mobile'], 'cf_1119': 'Trial',
+            #           'last_contacted_via': lead['last_contacted_via'], 'cf_1135': lead['createdtime'],
+            #           'cf_1143': lead['cf_1004'], 'last_contacted_on': lead['last_contacted_on'],
+            #           'cf_1177': lead['cf_1159'], 'salutationtype': lead['salutationtype'],
+            #           'cf_1167': lead['cf_1183'], 'cf_1131': 'Name and Originator IP',
+            #           'lastname': lead['lastname'], 'email': lead['email'], 'leadsource': lead['leadsource'],
+            #           'tags': lead['tags'], 'source': lead['source'], 'firstname': lead['firstname'],
+            #           'cf_1179': lead['createdtime'], 'starred': lead['starred'],
+            #           'created_user_id': lead['created_user_id'], 'assigned_user_id': lead['assigned_user_id'],
+            #           'cf_1175': 'Clients needs', 'engagement_score': lead['engagement_score'],
+            #           'cf_1139': lead['cf_1155'], 'isconvertedfromlead': 'Yes', 'cf_1022': 'Trial',
+            #           'emailoptout': 'No'}
+            # base_data.update(data)
+            # V.create(base_data, 'Contacts')
+            # V.delete(lead['id'])
+        else:
+            base_data = contact
+            base_data.update(data)
+            V.update(base_data)
 
 if __name__ == '__main__':
-    V = Vtiger('k.s.4invest@gmail.com', 'https://infoconsulting2.od2.vtiger.com', 'ez9k5qpJ6fBLOJM7')
-    # V = Vtiger('andreyfrost@gmail.com', 'https://gm64.od2.vtiger.com', '0KfHCXp6gynViFDi')
+    # V = Vtiger('k.s.4invest@gmail.com', 'https://infoconsulting2.od2.vtiger.com', 'ez9k5qpJ6fBLOJM7')
+    V = Vtiger('andreyfrost@gmail.com', 'https://gm64.od2.vtiger.com', '0KfHCXp6gynViFDi')
     V.login()
     # a = V.query("select id from paymetsdetail where firstname='%s' order by id desc limit 1" % 'Анна')
-
-    a = V.describe('Leads', mandatory=False)
-    print(a)
+    # a = V.describe('Contacts', mandatory=False)
+    from EF import db
+    codes = db.query("""select coalesce(dialcodes, '') as dialcodes, auth_user.username from auth_user
+     LEFT JOIN instance_summary on instance_summary.instance_id = auth_user.instance_id
+      WHERE dialcodes is not null;""")
+    for code in codes:
+        V.update(code['username'], {'cf_1129': code['dialcodes']})
+    # print(a)
     # V.describe('Leads', mandatory=False)
     # refs = V.query("select id from Users where title = 'Sales Representative'")
     # ref = refs[random.randint(0, len(refs)-1)]['id']
