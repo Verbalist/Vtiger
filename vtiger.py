@@ -178,8 +178,7 @@ class Vtiger():
             V.update(base_data)
 
 if __name__ == '__main__':
-    # V = Vtiger('k.s.4invest@gmail.com', 'https://infoconsulting2.od2.vtiger.com', 'ez9k5qpJ6fBLOJM7')
-    V = Vtiger('andreyfrost@gmail.com', 'https://gm64.od2.vtiger.com', '0KfHCXp6gynViFDi')
+    V = Vtiger('test@gmail.com', 'https://test.com', 'testi')
     V.login()
     # a = V.query("select id from paymetsdetail where firstname='%s' order by id desc limit 1" % 'Анна')
     # a = V.describe('Contacts', mandatory=False)
